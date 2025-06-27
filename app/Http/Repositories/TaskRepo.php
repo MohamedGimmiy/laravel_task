@@ -9,7 +9,13 @@ class TaskRepo implements ITaskRepo {
 
     public function getAll($request){
 
-        return Task::when($request->from && $request->to,function($query)use($request){
+        return Task::when($request->search,function($query)use($request){
+            $query->where(function($q) use($request){
+                $q->where('title', 'LIKE', "%$request->search%")
+                ->orWhere('description', 'LIKE', "%$request->search%");
+            });
+        })
+        ->when($request->from && $request->to,function($query)use($request){
         $query->whereDate('due_date', '>', $request->from)
         ->whereDate('due_date', '<=', $request->to);
         })
@@ -20,7 +26,7 @@ class TaskRepo implements ITaskRepo {
             $query->when($request->sort === 'priority', function ($query) use ($request) {
                 $order = $request->direction === 'asc' ? ['Low', 'Medium', 'High'] : ['High', 'Medium', 'Low'];
 
-                return $query->orderByRaw("FIELD(priority, '" . implode("','", $order) . "')");
+                $query->orderByRaw("FIELD(priority, '" . implode("','", $order) . "')");
             })
             ->when($request->sort != 'priority',function($query)use($request){
                 $query->orderBy($request->sort, $request->sortType);
