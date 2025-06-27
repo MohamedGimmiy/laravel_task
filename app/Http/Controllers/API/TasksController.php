@@ -58,4 +58,16 @@ class TasksController extends Controller
             'data' => $task
         ]);
     }
+
+    public function deleteTask($id){
+        $isdeleted= $this->taskService->deleteTask($id,Auth::id());
+        if($isdeleted){
+            return response()->json([
+                'message' => 'Task deleted successfully',
+            ]);
+        }
+
+        abort(404, 'Task not found');
+
+    }
 }

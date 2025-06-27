@@ -32,4 +32,5 @@ Route::prefix('task')->middleware('auth:api')->group(function(){
     Route::post('store', [TasksController::class, 'store']);
     Route::post('update/{id}', [TasksController::class, 'update']);
     Route::get('show/{id}', [TasksController::class, 'show']);
+    Route::delete('delete/{id}', [TasksController::class, 'deleteTask']);
 });
