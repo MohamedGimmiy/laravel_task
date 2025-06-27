@@ -36,6 +36,7 @@ class TasksController extends Controller
             'description' => $request->description,
             'due_date'    => $request->due_date,
             'user_id'     => Auth::id(), // ✅ assign user_id here
+            'priority' => $request->priority ?? 'Low'
         ];
 
         $task = $this->taskService->createTask($data);
@@ -52,7 +53,8 @@ class TasksController extends Controller
             'title'       => $request->title,
             'description' => $request->description,
             'due_date'    => $request->due_date,
-            'status' => $request->status
+            'status' => $request->status,
+            'priority' => $request->priority
         ];
 
         $this->taskService->updateTask($id,$data, Auth::id());

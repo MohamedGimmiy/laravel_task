@@ -17,7 +17,14 @@ class TaskRepo implements ITaskRepo {
             $query->where('status', $request->status);
         })
         ->when($request->sort && $request->sortType,function($query)use($request){
-            $query->orderBy($request->sort, $request->sortType);
+            $query->when($request->sort === 'priority', function ($query) use ($request) {
+                $order = $request->direction === 'asc' ? ['Low', 'Medium', 'High'] : ['High', 'Medium', 'Low'];
+
+                return $query->orderByRaw("FIELD(priority, '" . implode("','", $order) . "')");
+            })
+            ->when($request->sort != 'priority',function($query)use($request){
+                $query->orderBy($request->sort, $request->sortType);
+            });
         })
         ->get();
     }
@@ -40,6 +47,7 @@ class TaskRepo implements ITaskRepo {
             'due_date'    => $data['due_date'],
             'status'      => $data['status'] ?? 'Pending',
             'user_id'     => Auth::id(),
+            'priority' => $data['priority'] ?? 'Low'
         ]);
     }
 
@@ -56,6 +64,7 @@ class TaskRepo implements ITaskRepo {
             'description' => $data['description'] ?? $task->description,
             'due_date'    => $data['due_date'] ?? $task->due_date,
             'status'      => $data['status'] ?? $task->status,
+            'priority' => $data['priority'] ?? $task->priority
         ]);
 
         return $task;
