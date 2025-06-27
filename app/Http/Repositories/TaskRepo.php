@@ -7,7 +7,22 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskRepo implements ITaskRepo {
 
-    public function getAll($userId)
+    public function getAll($request){
+
+        return Task::when($request->from && $request->to,function($query)use($request){
+        $query->whereDate('due_date', '>', $request->from)
+        ->whereDate('due_date', '<=', $request->to);
+        })
+        ->when($request->status, function($query)use($request){
+            $query->where('status', $request->status);
+        })
+        ->when($request->sort && $request->sortType,function($query)use($request){
+            $query->orderBy($request->sort, $request->sortType);
+        })
+        ->get();
+    }
+
+    public function getUserTasks($userId)
     {
         return Task::where('user_id', $userId)->get();
     }

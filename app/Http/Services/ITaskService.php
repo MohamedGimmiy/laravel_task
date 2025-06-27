@@ -5,6 +5,8 @@ namespace App\Http\Services;
 
 interface ITaskService {
 
+    public function getAll($request);
+
     public function getUserTasks($userId);
 
     public function createTask(array $data);

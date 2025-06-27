@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskCreationRequest;
 use App\Http\Requests\TaskUpdateRequest;
 use App\Http\Services\ITaskService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TasksController extends Controller
@@ -15,6 +16,17 @@ class TasksController extends Controller
     public function __construct(ITaskService $taskService)
     {
         $this->taskService = $taskService;
+    }
+
+    public function getAll(Request $request){
+
+
+        $tasks = $this->taskService->getAll($request);
+
+        return response()->json([
+            'message' => 'tasks returned successfully',
+            'data' => $tasks
+        ]);
     }
 
     public function store(TaskCreationRequest $request)

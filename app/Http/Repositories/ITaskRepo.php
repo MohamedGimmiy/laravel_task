@@ -5,7 +5,9 @@ namespace App\Http\Repositories;
 interface ITaskRepo
 {
 
-    function getAll($userId);
+    function getAll($request);
+
+    function getUserTasks($userId);
 
     function getById($id);
 

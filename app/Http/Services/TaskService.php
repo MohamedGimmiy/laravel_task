@@ -17,6 +17,9 @@ class TaskService implements ITaskService {
         $this->taskRepo = $taskRepo;
     }   
     
+    public function getAll($request){
+        return $this->taskRepo->getAll($request);
+    }
     public function getTask($id)
     {
         $task =  $this->taskRepo->getById($id);
