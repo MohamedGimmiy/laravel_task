@@ -75,6 +75,20 @@ class TaskRepo implements ITaskRepo {
 
         return $task;
     }
+        public function updateStatus($id, array $data, $userId)
+    {
+        $task = $this->getById($id, $userId);
+
+        if (!$task) {
+            return null;
+        }
+
+        $task->update([
+            'status'      => $data['status'] ?? $task->status,
+        ]);
+
+        return $task;
+    }
 
     public function delete($id, $userId)
     {

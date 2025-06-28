@@ -5,15 +5,17 @@ namespace App\Http\Services;
 
 interface ITaskService {
 
-    public function getAll($request);
+    function getAll($request);
 
-    public function getUserTasks($userId);
+    function getUserTasks($userId);
 
-    public function createTask(array $data);
+    function createTask(array $data);
 
-    public function updateTask($id, array $data, $userId);
+    function updateTask($id, array $data, $userId);
 
-    public function deleteTask($id, $userId);
+    public function updateTaskStatus($id, array $data, $user_id);
 
-    public function getTask($id);
+    function deleteTask($id, $userId);
+
+    function getTask($id);
 }

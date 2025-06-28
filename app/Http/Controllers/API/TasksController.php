@@ -18,7 +18,8 @@ class TasksController extends Controller
         $this->taskService = $taskService;
     }
 
-    public function getAll(Request $request){
+    public function getAll(Request $request)
+    {
 
 
         $tasks = $this->taskService->getAll($request);
@@ -47,7 +48,8 @@ class TasksController extends Controller
         ]);
     }
 
-    public function update(TaskUpdateRequest $request, $id){
+    public function update(TaskUpdateRequest $request, $id)
+    {
 
         $data = [
             'title'       => $request->title,
@@ -57,14 +59,31 @@ class TasksController extends Controller
             'priority' => $request->priority
         ];
 
-        $this->taskService->updateTask($id,$data, Auth::id());
-        
-         return response()->json([
+        $this->taskService->updateTask($id, $data, Auth::id());
+
+        return response()->json([
             'message' => 'task updated successfully!'
-         ]);
+        ]);
+    }
+    public function updateStatus(Request $request, $id)
+    {
+
+        $request->validate([
+            'status' => 'required'
+        ]);
+
+        $data = [
+            'status' => $request->status,
+        ];
+        $this->taskService->updateTaskStatus($id, $data, Auth::id());
+
+        return response()->json([
+            'message' => 'task updated successfully!'
+        ]);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $task = $this->taskService->getTask($id);
 
         return response()->json([
@@ -73,15 +92,15 @@ class TasksController extends Controller
         ]);
     }
 
-    public function deleteTask($id){
-        $isdeleted= $this->taskService->deleteTask($id,Auth::id());
-        if($isdeleted){
+    public function deleteTask($id)
+    {
+        $isdeleted = $this->taskService->deleteTask($id, Auth::id());
+        if ($isdeleted) {
             return response()->json([
                 'message' => 'Task deleted successfully',
             ]);
         }
 
         abort(404, 'Task not found');
-
     }
 }

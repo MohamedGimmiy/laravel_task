@@ -17,4 +17,6 @@ interface ITaskRepo
 
     function delete($id, $userId);
 
+    function updateStatus($id, array $data, $userId);
+
 }

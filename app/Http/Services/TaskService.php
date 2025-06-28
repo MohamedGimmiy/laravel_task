@@ -51,6 +51,19 @@ class TaskService implements ITaskService {
         return $this->taskRepo->update($id, $data, $userId);
 
     }
+        public function updateTaskStatus($id, array $data, $userId)
+    {
+        $task = $this->taskRepo->getById($id, Auth::id());
+        if(empty($task)){
+            abort(404, 'Not Found');
+        }
+
+        if(!empty($data['status']) && $data['status'] == 'Completed' && $task->status != 'InProgress'){
+            abort(400, 'Bad Request');
+        }
+        return $this->taskRepo->updateStatus($id, $data, $userId);
+
+    }
 
     public function deleteTask($id, $userId)
     {
