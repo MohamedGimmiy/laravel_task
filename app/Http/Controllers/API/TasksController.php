@@ -18,10 +18,11 @@ class TasksController extends Controller
         $this->taskService = $taskService;
     }
 
+    /**
+     * getting all tasks of all users needs authentication token
+     */
     public function getAll(Request $request)
     {
-
-
         $tasks = $this->taskService->getAll($request);
 
         return response()->json([
@@ -30,6 +31,9 @@ class TasksController extends Controller
         ]);
     }
 
+    /**
+     * creating a task needs authentication token
+     */
     public function store(TaskCreationRequest $request)
     {
         $data = [
@@ -48,6 +52,9 @@ class TasksController extends Controller
         ]);
     }
 
+    /**
+     * updating a task needs authentication token
+     */
     public function update(TaskUpdateRequest $request, $id)
     {
 
@@ -65,6 +72,10 @@ class TasksController extends Controller
             'message' => 'task updated successfully!'
         ]);
     }
+
+    /**
+     * update status needs authentication token
+     */
     public function updateStatus(Request $request, $id)
     {
 
@@ -82,6 +93,9 @@ class TasksController extends Controller
         ]);
     }
 
+    /**
+     * display a task needs authentication token
+     */
     public function show($id)
     {
         $task = $this->taskService->getTask($id);
@@ -92,6 +106,9 @@ class TasksController extends Controller
         ]);
     }
 
+    /**
+     * soft deleting a task needs authentication token
+     */
     public function deleteTask($id)
     {
         $isdeleted = $this->taskService->deleteTask($id, Auth::id());
